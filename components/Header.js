@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { DateRangePicker } from "react-date-range";
 import {
   AiOutlineSearch,
@@ -11,19 +12,20 @@ import { FaUserCircle } from "react-icons/fa";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
-const Header = () => {
+const Header = ({ placeholder }) => {
   const [searchInput, setSearchInput] = useState("");
-  const [startData, setStartData] = useState(new Date());
-  const [endData, setEndData] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [noOfGuests, setNoOfGuests] = useState(1);
+  const router = useRouter();
 
   const handleSelect = (ranges) => {
-    setStartData(ranges.selectionRange.startData);
-    setEndData(ranges.selectionRange.endData);
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
   };
   const selectionRange = {
-    startData: startData,
-    endData: endData,
+    startDate: startDate,
+    endDate: endDate,
     key: "selection",
   };
 
@@ -31,14 +33,28 @@ const Header = () => {
     setSearchInput("");
   };
 
+  const search = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        location: searchInput,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        noOfGuests,
+      },
+    });
+  };
+
   return (
     <header
-      className="sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5
-        md:px-10
-        "
+      className="sticky top-0 z-50 grid grid-cols-3 
+      bg-white shadow-md py-5 px-5 md:px-10"
     >
       {/* left */}
-      <div className="relative flex items-center h-10 cursor-pointer my-auto">
+      <div
+        className="relative flex items-center h-10 cursor-pointer my-auto"
+        onClick={() => router.push("/")}
+      >
         <Image
           src="https://links.papareact.com/qd3"
           layout="fill"
@@ -53,7 +69,7 @@ const Header = () => {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           type="text"
-          placeholder="Start Your Search"
+          placeholder={placeholder || "Start Your Search"}
           className="flex-grow pl-5 bg-transparent outline-none text-sm text-gray-400
                 placeholder-gray-400"
         />
@@ -100,7 +116,10 @@ const Header = () => {
             >
               Cancel
             </button>
-            <button className="flex-grow text-red-400 cursor-pointer">
+            <button
+              className="flex-grow text-red-400 cursor-pointer"
+              onClick={search}
+            >
               Search
             </button>
           </div>
