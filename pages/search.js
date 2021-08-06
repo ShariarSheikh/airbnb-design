@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { format } from "date-fns";
 import InfoCard from "../components/InfoCard";
+import Map from "../components/Map";
 
 const Search = ({ searchResult }) => {
   const router = useRouter();
@@ -11,8 +12,6 @@ const Search = ({ searchResult }) => {
   const startDateFind = format(new Date(startDate), "dd MMMM yy");
   const endDateFind = format(new Date(endDate), "dd MMMM yy");
   const range = `${startDateFind} - ${endDateFind}`;
-
-  console.log(searchResult);
 
   return (
     <div>
@@ -38,7 +37,7 @@ const Search = ({ searchResult }) => {
             <p className="button">More Filters</p>
           </div>
           {searchResult?.map(
-            ({ img, location, title, description, star, price,total }) => (
+            ({ img, location, title, description, star, price, total }) => (
               <InfoCard
                 key={img}
                 img={img}
@@ -51,6 +50,9 @@ const Search = ({ searchResult }) => {
               />
             )
           )}
+        </section>
+        <section className="hidden xl:inline-flex xl:min-w-[600px] min-h-[600px]">
+          <Map searchResult={searchResult}/>
         </section>
       </main>
       <Footer />
