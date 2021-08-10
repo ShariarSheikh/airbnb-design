@@ -9,3 +9,9 @@
         active:bg-gray-100 transition transform duration-100 ease-out;
   }
 }
+
+@media screen and (max-width: 514px) {
+  .rdrDateRangePickerWrapper {
+    flex-direction: column !important;
+  }
+}
